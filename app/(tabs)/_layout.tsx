@@ -33,13 +33,7 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => <TabBarIcon name="diamond" color={color} />,
         }}
       />
-      <Tabs.Screen
-        name="two"
-        options={{
-          title: 'Random tab',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
-        }}
-      />
+      {/* add new tab here */}
     </Tabs>
   );
 }
