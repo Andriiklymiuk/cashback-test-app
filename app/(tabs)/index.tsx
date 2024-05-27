@@ -1,31 +1,59 @@
 import { StyleSheet } from 'react-native';
 
-import EditScreenInfo from '@/components/EditScreenInfo';
-import { Text, View } from '@/components/Themed';
+import { FlashList } from '@shopify/flash-list';
+import { useEffect } from 'react';
+import { Text, Image, XStack, YStack } from 'tamagui';
+import { useOffersStore } from '@/store/offersStore';
+import { Offer } from '@/types/offer';
+import { Link, router } from 'expo-router';
 
-export default function TabOneScreen() {
+const OfferComponent: React.FC<Offer> = (offerProps) => {
+  const {
+    id, title, description, cashbackAmount, expirationDate, retailerLogo, termsAndConditions
+  } = offerProps;
+
+  const onOfferPressed = () => {
+    router.push('/offer');
+  }
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Tab One</Text>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <EditScreenInfo path="app/(tabs)/index.tsx" />
-    </View>
+    <YStack
+      backgroundColor="$backgroundContrast"
+      margin="$3"
+      padding="$4"
+      borderRadius="$4"
+      onPress={onOfferPressed}
+    >
+      <XStack flexDirection="row" alignItems="center" gap="$4">
+        <YStack flex={1} gap="$3">
+          <Text fontWeight="bold" fontSize="$6" color="$primary">Title: {title}</Text>
+          <Text fontSize="$4">{description}</Text>
+          <Text color="$orange8" fontSize="$4" fontWeight="bold">Cashback: {cashbackAmount}%</Text>
+          {/* <Text color="$gray4" fontSize="$2">{termsAndConditions}</Text> */}
+          <Text color="$gray3" fontSize="$4">Expires: {expirationDate}</Text>
+        </YStack>
+        <Image src={retailerLogo} width={80} height={80} borderRadius={40} />
+      </XStack>
+    </YStack>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
-  },
-});
+export default function TabOneScreen() {
+  const { offers, getOffers } = useOffersStore();
+
+  useEffect(() => {
+    getOffers();
+  }, []);
+
+  return (
+    <YStack flex={1}>
+      <FlashList
+        data={offers}
+        renderItem={({ item }) => <OfferComponent {...item} />}
+        keyExtractor={item => item.id.toString()}
+        estimatedItemSize={160}
+        ItemSeparatorComponent={() => <YStack height={0.5} width={1000} backgroundColor="$gray10Light" />}
+      />
+    </YStack>
+  );
+};
