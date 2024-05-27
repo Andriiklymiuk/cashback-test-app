@@ -9,11 +9,20 @@ import { Link, router } from 'expo-router';
 
 const OfferComponent: React.FC<Offer> = (offerProps) => {
   const {
-    id, title, description, cashbackAmount, expirationDate, retailerLogo, termsAndConditions
+    title,
+    description,
+    cashbackAmount,
+    expirationDate,
+    retailerLogo
   } = offerProps;
 
   const onOfferPressed = () => {
-    router.push('/offer');
+    router.push({
+      pathname: '/offer',
+      params: {
+        ...offerProps
+      }
+    });
   }
 
   return (

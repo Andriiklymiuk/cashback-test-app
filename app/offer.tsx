@@ -1,35 +1,42 @@
+import React from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { Platform, StyleSheet } from 'react-native';
+import { Button, Image, Text, YStack } from 'tamagui';
+import { useRouter, useLocalSearchParams } from 'expo-router';
+import { Offer } from '@/types/offer';
 
-import EditScreenInfo from '@/components/EditScreenInfo';
-import { Text, View } from '@/components/Themed';
+export default function OfferDetailScreen() {
+  // get params from router
+  const router = useRouter();
+  const params = useLocalSearchParams();
+  const {
+    id,
+    title,
+    description,
+    cashbackAmount,
+    expirationDate,
+    retailerLogo,
+    termsAndConditions
+  } = params as any as Offer;
 
-export default function ModalScreen() {
+  const onClaimOfferPressed = () => {
+    console.log('Claim Offer Pressed')
+  }
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Modal</Text>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <EditScreenInfo path="app/offer.tsx" />
-
-      {/* Use a light status bar on iOS to account for the black space above the modal */}
-      <StatusBar style={Platform.OS === 'ios' ? 'light' : 'auto'} />
-    </View>
+    <YStack flex={1} padding={20} alignItems="center" gap="$4">
+      <Image src={retailerLogo} width={150} height={150} borderRadius={75} />
+      <Text fontWeight="bold" fontSize="$6" color="$primary" textAlign="center">{title}</Text>
+      <Text fontSize="$3">{description}</Text>
+      <Text fontSize="$3" color="$gray8" textAlign="center">{termsAndConditions}</Text>
+      <Text fontSize="$3" color="$gray10">Expires on: {expirationDate}</Text>
+      <Button
+        onPress={onClaimOfferPressed}
+        theme="orange"
+        size="$4"
+      >
+        Claim Offer
+      </Button>
+      <StatusBar style="auto" />
+    </YStack>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
-  },
-});
