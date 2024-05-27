@@ -5,8 +5,6 @@ import { useRouter, useLocalSearchParams } from 'expo-router';
 import { Offer } from '@/types/offer';
 
 export default function OfferDetailScreen() {
-  // get params from router
-  const router = useRouter();
   const params = useLocalSearchParams();
   const {
     id,
@@ -19,7 +17,7 @@ export default function OfferDetailScreen() {
   } = params as any as Offer;
 
   const onClaimOfferPressed = () => {
-    console.log('Claim Offer Pressed')
+    console.log('TODO: Claim Offer Pressed')
   }
 
   return (
