@@ -12,3 +12,8 @@ ios
 ```
 bun ios
 ```
+
+android
+```
+bun android
+```
